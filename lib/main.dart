@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'core/app_theme.dart';
-import 'screens/home/home_screen.dart';
+import 'screens/splash_screen.dart';
 
 void main() {
   runApp(const YayasanApp());
@@ -16,7 +16,7 @@ class YayasanApp extends StatelessWidget {
       title: 'Yayasan Zainul Ilah',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      home: const HomeScreen(),
+      home: const SplashScreen(),
     );
   }
 }
