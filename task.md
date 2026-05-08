@@ -13,8 +13,8 @@
     - [x] Layar Splash (Splash Screen)
     - [x] Layar Daftar Program
     - [x] Layar Detail Berita
-    - [ ] Layar Beranda (Dashboard) - *Selesai*
-    - [ ] Layar Informasi Donasi
+    - [x] Layar Beranda (Dashboard) - *Selesai*
+    - [x] Layar Informasi Donasi
 - [ ] **Fase 4: Finalisasi**
     - [ ] Menambahkan dokumentasi `README.md`
     - [ ] Pemolesan akhir UI/UX
