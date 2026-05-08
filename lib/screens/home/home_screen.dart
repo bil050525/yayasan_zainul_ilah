@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../programs/program_list_screen.dart';
+import '../news/news_detail_screen.dart';
+import '../../models/news_model.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -127,24 +129,58 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildLatestNews() {
-    return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 24),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             'Berita Terbaru',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 16),
-          // Placeholder for news cards
-          Card(
-            child: ListTile(
-              leading: Icon(Icons.newspaper),
-              title: Text('Pembangunan Gedung Madrasah'),
-              subtitle: Text('Progress pembangunan saat ini mencapai 70%...'),
-            ),
+          const SizedBox(height: 16),
+          ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: dummyNews.length,
+            itemBuilder: (context, index) {
+              final news = dummyNews[index];
+              return Card(
+                margin: const EdgeInsets.only(bottom: 12),
+                child: ListTile(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => NewsDetailScreen(news: news),
+                      ),
+                    );
+                  },
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.network(
+                      news.imageUrl,
+                      width: 60,
+                      height: 60,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  title: Text(
+                    news.title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: Text(
+                    news.content,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              );
+            },
           ),
+          const SizedBox(height: 24),
         ],
       ),
     );
