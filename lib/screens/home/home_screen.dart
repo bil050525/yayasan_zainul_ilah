@@ -66,7 +66,7 @@ class HomeScreen extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             'Membangun umat melalui pendidikan dan pemberdayaan sosial.',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.whiteB),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white70),
           ),
           const SizedBox(height: 24),
           ElevatedButton(
@@ -108,7 +108,7 @@ class HomeScreen extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Colors.white70,
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
