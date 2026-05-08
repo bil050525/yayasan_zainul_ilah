@@ -1,0 +1,21 @@
+# Daftar Tugas - Aplikasi Yayasan Zainul Ilah
+
+- [x] **Fase 1: Inisialisasi Proyek**
+    - [x] Inisialisasi proyek Flutter (`flutter create .`)
+    - [x] Inisialisasi repositori Git (`git init`)
+    - [x] Menambahkan dependensi awal di `pubspec.yaml`
+    - [x] Membuat struktur folder awal
+- [x] **Fase 2: Inti & Tema**
+    - [x] Membuat `ThemeData` dengan palet Hijau/Putih
+    - [x] Setup Google Fonts (Inter)
+    - [x] Membuat struktur dasar widget `App`
+- [ ] **Fase 3: Pengembangan UI**
+    - [x] Layar Splash (Splash Screen)
+    - [x] Layar Daftar Program
+    - [x] Layar Detail Berita
+    - [ ] Layar Beranda (Dashboard) - *Selesai*
+    - [ ] Layar Informasi Donasi
+- [ ] **Fase 4: Finalisasi**
+    - [ ] Menambahkan dokumentasi `README.md`
+    - [ ] Pemolesan akhir UI/UX
+    - [ ] Push terakhir ke Git
