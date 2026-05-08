@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../programs/program_list_screen.dart';
 import '../news/news_detail_screen.dart';
+import '../donation/donation_screen.dart';
 import '../../models/news_model.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -75,7 +76,7 @@ class HomeScreen extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const ProgramListScreen()),
+                MaterialPageRoute(builder: (context) => const DonationScreen()),
               );
             },
             style: ElevatedButton.styleFrom(
