@@ -22,5 +22,6 @@
 - [x] **Fase 5: Autentikasi**
     - [x] Membuat Layar Login
     - [x] Membuat Layar Pendaftaran (Register)
+    - [x] Membuat Layar Profil Fungsional
     - [x] Menghubungkan Splash Screen ke Login
     - [x] Memperbaiki Bug Layout Beranda
