@@ -5,6 +5,7 @@ import '../news/news_detail_screen.dart';
 import '../donation/donation_screen.dart';
 import '../auth/login_screen.dart';
 import '../profile/profile_screen.dart';
+import '../dashboard/transparency_dashboard.dart';
 import '../../models/news_model.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -86,7 +87,7 @@ class _HomeContent extends StatelessWidget {
         child: Column(
           children: [
             _buildHeroSection(context),
-            _buildQuickActions(),
+            _buildQuickActions(context),
             _buildLatestNews(),
           ],
         ),
@@ -139,7 +140,7 @@ class _HomeContent extends StatelessWidget {
     );
   }
 
-  Widget _buildQuickActions() {
+  Widget _buildQuickActions(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(24),
       child: Row(
@@ -148,7 +149,15 @@ class _HomeContent extends StatelessWidget {
           _quickActionItem(Icons.school, 'Pendidikan'),
           _quickActionItem(Icons.favorite, 'Sosial'),
           _quickActionItem(Icons.mosque, 'Dakwah'),
-          _quickActionItem(Icons.info, 'Tentang'),
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const TransparencyDashboard()),
+              );
+            },
+            child: _quickActionItem(Icons.analytics, 'Laporan'),
+          ),
         ],
       ),
     );
