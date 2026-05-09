@@ -10,38 +10,52 @@ class AppTheme {
   static const Color textSecondary = Color(0xFF757575);
 
   static ThemeData get lightTheme {
+    return _buildTheme(Brightness.light);
+  }
+
+  static ThemeData get darkTheme {
+    return _buildTheme(Brightness.dark);
+  }
+
+  static ThemeData _buildTheme(Brightness brightness) {
+    final bool isDark = brightness == Brightness.dark;
+
     return ThemeData(
       useMaterial3: true,
+      brightness: brightness,
       colorScheme: ColorScheme.fromSeed(
         seedColor: primaryColor,
         primary: primaryColor,
         secondary: accentColor,
-        surface: surfaceColor,
-        background: backgroundColor,
+        surface: isDark ? const Color(0xFF121212) : surfaceColor,
+        background: isDark ? const Color(0xFF121212) : backgroundColor,
+        brightness: brightness,
       ),
-      scaffoldBackgroundColor: backgroundColor,
-      textTheme: GoogleFonts.interTextTheme().copyWith(
+      scaffoldBackgroundColor: isDark ? const Color(0xFF121212) : backgroundColor,
+      textTheme: GoogleFonts.interTextTheme(
+        isDark ? ThemeData.dark().textTheme : ThemeData.light().textTheme,
+      ).copyWith(
         displayLarge: GoogleFonts.inter(
           fontSize: 32,
           fontWeight: FontWeight.bold,
-          color: textPrimary,
+          color: isDark ? Colors.white : textPrimary,
         ),
         titleLarge: GoogleFonts.inter(
           fontSize: 20,
           fontWeight: FontWeight.w600,
-          color: textPrimary,
+          color: isDark ? Colors.white : textPrimary,
         ),
         bodyLarge: GoogleFonts.inter(
           fontSize: 16,
-          color: textPrimary,
+          color: isDark ? Colors.white70 : textPrimary,
         ),
         bodyMedium: GoogleFonts.inter(
           fontSize: 14,
-          color: textSecondary,
+          color: isDark ? Colors.white60 : textSecondary,
         ),
       ),
-      appBarTheme: const AppBarTheme(
-        backgroundColor: primaryColor,
+      appBarTheme: AppBarTheme(
+        backgroundColor: isDark ? const Color(0xFF1F1F1F) : primaryColor,
         foregroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
@@ -60,7 +74,7 @@ class AppTheme {
         ),
       ),
       cardTheme: CardThemeData(
-        color: surfaceColor,
+        color: isDark ? const Color(0xFF1F1F1F) : surfaceColor,
         elevation: 2,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
