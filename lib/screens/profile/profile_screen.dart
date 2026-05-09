@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../providers/theme_provider.dart';
 import '../auth/login_screen.dart';
+import '../attendance/attendance_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -87,6 +88,12 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
           _buildMenuItem(Icons.history, 'Riwayat Donasi', () {}),
+          _buildMenuItem(Icons.calendar_today, 'Absensi Pengurus', () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const AttendanceScreen()),
+            );
+          }),
           _buildMenuItem(Icons.notifications_outlined, 'Notifikasi', () {}),
           _buildMenuItem(Icons.security, 'Keamanan Akun', () {}),
           _buildMenuItem(Icons.help_outline, 'Pusat Bantuan', () {}),
