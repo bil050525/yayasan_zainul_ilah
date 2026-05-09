@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/program_model.dart';
+import '../donation/donation_screen.dart';
 import 'package:intl/intl.dart';
 
 class ProgramListScreen extends StatelessWidget {
@@ -107,7 +108,12 @@ class ProgramListScreen extends StatelessWidget {
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const DonationScreen()),
+                            );
+                          },
                           child: const Text('Donasi Sekarang'),
                         ),
                       ),

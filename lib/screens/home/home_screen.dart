@@ -17,11 +17,21 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
 
-  final List<Widget> _pages = [
-    const _HomeContent(),
-    const ProgramListScreen(),
-    const ProfileScreen(),
-  ];
+  final List<Widget> _pages;
+
+  @override
+  void initState() {
+    super.initState();
+    _pages = [
+      _HomeContent(onTabChanged: (index) {
+        setState(() {
+          _currentIndex = index;
+        });
+      }),
+      const ProgramListScreen(),
+      const ProfileScreen(),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Beranda'),
-          BottomNavigationBarItem(icon: Icon(Icons.volunteer_activism), label: 'Program'),
+          BottomNavigationBarItem(icon: Icon(Icons.volunteer_activism), label: 'Donasi'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
         ],
       ),
@@ -48,7 +58,8 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class _HomeContent extends StatelessWidget {
-  const _HomeContent();
+  final Function(int) onTabChanged;
+  const _HomeContent({required this.onTabChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -116,12 +127,7 @@ class _HomeContent extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const DonationScreen()),
-              );
-            },
+            onPressed: () => onTabChanged(1),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white,
               foregroundColor: Theme.of(context).primaryColor,
