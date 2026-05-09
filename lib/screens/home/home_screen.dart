@@ -161,8 +161,8 @@ class HomeScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                     child: Image.network(
                       news.imageUrl,
-                      width: 60,
-                      height: 60,
+                      width: 50,
+                      height: 50,
                       fit: BoxFit.cover,
                     ),
                   ),
