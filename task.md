@@ -18,4 +18,4 @@
 - [ ] **Fase 4: Finalisasi**
     - [x] Menambahkan dokumentasi `README.md`
     - [ ] Pemolesan akhir UI/UX
-    - [ ] Push terakhir ke Git
+    - [x] Push terakhir ke Git
