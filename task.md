@@ -15,7 +15,10 @@
     - [x] Layar Detail Berita
     - [x] Layar Beranda (Dashboard) - *Selesai*
     - [x] Layar Informasi Donasi
-- [ ] **Fase 4: Finalisasi**
+- [x] **Fase 4: Finalisasi**
     - [x] Menambahkan dokumentasi `README.md`
     - [ ] Pemolesan akhir UI/UX
     - [x] Push terakhir ke Git
+- [x] **Fase 5: Autentikasi**
+    - [x] Membuat Layar Login
+    - [x] Menghubungkan Splash Screen ke Login

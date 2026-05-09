@@ -5,7 +5,8 @@ Aplikasi mobile berbasis Flutter yang dirancang untuk mempermudah masyarakat dal
 ## 🌟 Fitur Utama
 
 1.  **Splash Screen Elegan**: Tampilan pembuka yang profesional dengan animasi logo.
-2.  **Dashboard Beranda**: Ringkasan visi misi, akses cepat ke kategori program, dan berita terbaru.
+2.  **Halaman Login Modern**: Sistem autentikasi untuk keamanan akses pengguna.
+3.  **Dashboard Beranda**: Ringkasan visi misi, akses cepat ke kategori program, dan berita terbaru.
 3.  **Daftar Program Yayasan**: Informasi detail mengenai program pendidikan, sosial, dan dakwah lengkap dengan indikator dana terkumpul.
 4.  **Detail Berita (Sliver UI)**: Halaman berita dengan tampilan visual yang menarik menggunakan efek *Sliver AppBar*.
 5.  **Modul Donasi**: Informasi rekening bank yang jelas dengan fitur salin nomor rekening otomatis dan konfirmasi WhatsApp.
