@@ -16,6 +16,6 @@
     - [x] Layar Beranda (Dashboard) - *Selesai*
     - [x] Layar Informasi Donasi
 - [ ] **Fase 4: Finalisasi**
-    - [ ] Menambahkan dokumentasi `README.md`
+    - [x] Menambahkan dokumentasi `README.md`
     - [ ] Pemolesan akhir UI/UX
     - [ ] Push terakhir ke Git
