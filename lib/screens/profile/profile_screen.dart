@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../providers/theme_provider.dart';
 import '../auth/login_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -69,10 +71,21 @@ class ProfileScreen extends StatelessWidget {
   }
 
   Widget _buildMenuSection(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
+          _buildMenuItem(
+            Icons.dark_mode_outlined, 
+            'Mode Gelap', 
+            () => themeProvider.toggleTheme(),
+            trailing: Switch(
+              value: themeProvider.isDarkMode,
+              onChanged: (value) => themeProvider.toggleTheme(),
+            ),
+          ),
           _buildMenuItem(Icons.history, 'Riwayat Donasi', () {}),
           _buildMenuItem(Icons.notifications_outlined, 'Notifikasi', () {}),
           _buildMenuItem(Icons.security, 'Keamanan Akun', () {}),
@@ -83,13 +96,13 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildMenuItem(IconData icon, String title, VoidCallback onTap) {
+  Widget _buildMenuItem(IconData icon, String title, VoidCallback onTap, {Widget? trailing}) {
     return Card(
-      margin: const EdgeInsets.only(bottom: 8),
+      margin: const EdgeInsets.all(4),
       child: ListTile(
         leading: Icon(icon, color: const Color(0xFF1B5E20)),
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.w500)),
-        trailing: const Icon(Icons.chevron_right),
+        trailing: trailing ?? const Icon(Icons.chevron_right),
         onTap: onTap,
       ),
     );
