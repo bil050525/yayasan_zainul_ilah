@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'auth/login_screen.dart';
+import 'home/home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -23,10 +25,15 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
     _controller.forward();
 
-    Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 3), () async {
+      final prefs = await SharedPreferences.getInstance();
+      final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+
       if (mounted) {
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const LoginScreen()),
+          MaterialPageRoute(
+            builder: (context) => isLoggedIn ? const HomeScreen() : const LoginScreen(),
+          ),
         );
       }
     });
