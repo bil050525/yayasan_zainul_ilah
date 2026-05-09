@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../programs/program_list_screen.dart';
 import '../news/news_detail_screen.dart';
 import '../donation/donation_screen.dart';
+import '../auth/login_screen.dart';
 import '../../models/news_model.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -12,6 +14,21 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Yayasan Zainul Ilah'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () async {
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.remove('isLoggedIn');
+              if (context.mounted) {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                );
+              }
+            },
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
