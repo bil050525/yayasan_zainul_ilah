@@ -25,7 +25,7 @@ final List<NewsModel> dummyNews = [
     content: 'Alhamdulillah, pembangunan gedung Madrasah Zainul Ilah terus menunjukkan kemajuan positif. Saat ini pembangunan telah mencapai tahap penyelesaian atap dan mulai memasuki tahap finishing interior. Kami mengucapkan terima kasih kepada seluruh donatur yang telah berkontribusi.',
     author: 'Admin Yayasan',
     date: '08 Mei 2026',
-    imageUrl: 'https://images.unsplash.com/photo-1541829070764-84a7d30dee62',
+    imageUrl: 'https://images.unsplash.com/photo-1577891729319-f4871c6ecdf1',
   ),
   NewsModel(
     id: '2',
