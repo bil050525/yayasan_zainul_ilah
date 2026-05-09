@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../home/home_screen.dart';
+import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -111,7 +112,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       const Text('Belum punya akun?'),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const RegisterScreen()),
+                          );
+                        },
                         child: const Text('Daftar sekarang'),
                       ),
                     ],
