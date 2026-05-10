@@ -80,7 +80,6 @@ class _DonationScreenState extends State<DonationScreen> {
       secondary: Icon(icon, color: Theme.of(context).primaryColor),
       value: name,
       groupValue: _selectedMethod,
-      contentPadding: EdgeInsets.zero,
       onChanged: (value) {
         setState(() {
           _selectedMethod = value!;

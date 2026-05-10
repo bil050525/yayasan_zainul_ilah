@@ -228,18 +228,21 @@ class _HomeContent extends StatelessWidget {
                       ),
                     );
                   },
-                  leading: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.network(
-                      news.imageUrl,
-                      width: 50,
-                      height: 50,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) => Container(
+                  leading: SizedBox(
+                    width: 50,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.network(
+                        news.imageUrl,
                         width: 50,
                         height: 50,
-                        color: Colors.grey[200],
-                        child: const Icon(Icons.broken_image, size: 20),
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) => Container(
+                          width: 50,
+                          height: 50,
+                          color: Colors.grey[200],
+                          child: const Icon(Icons.broken_image, size: 20),
+                        ),
                       ),
                     ),
                   ),

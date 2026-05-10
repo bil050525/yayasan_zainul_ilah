@@ -25,7 +25,7 @@ final List<NewsModel> dummyNews = [
     content: 'Alhamdulillah, pembangunan gedung Madrasah Zainul Ilah terus menunjukkan kemajuan positif. Saat ini pembangunan telah mencapai tahap penyelesaian atap dan mulai memasuki tahap finishing interior. Kami mengucapkan terima kasih kepada seluruh donatur yang telah berkontribusi.',
     author: 'Admin Yayasan',
     date: '08 Mei 2026',
-    imageUrl: 'https://images.unsplash.com/photo-1577891729319-f4871c6ecdf1',
+    imageUrl: 'https://picsum.photos/seed/news1/600/400',
   ),
   NewsModel(
     id: '2',
@@ -33,6 +33,6 @@ final List<NewsModel> dummyNews = [
     content: 'Yayasan Zainul Ilah telah menyalurkan 500 paket sembako kepada warga lansia dan janda prasejahtera di sekitar lingkungan yayasan. Kegiatan ini merupakan bagian dari program sosial rutin di bulan suci Ramadhan.',
     author: 'Tim Sosial',
     date: '01 Mei 2026',
-    imageUrl: 'https://images.unsplash.com/photo-1593113598332-cd288d649433',
+    imageUrl: 'https://picsum.photos/seed/news2/600/400',
   ),
 ];
