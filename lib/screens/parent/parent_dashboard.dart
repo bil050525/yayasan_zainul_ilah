@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'student_grades_screen.dart';
 
 class ParentDashboard extends StatelessWidget {
   const ParentDashboard({super.key});
@@ -130,7 +131,14 @@ class ParentDashboard extends StatelessWidget {
 
   Widget _serviceCard(BuildContext context, IconData icon, String label, Color color) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        if (label == 'Rapor Digital') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const StudentGradesScreen()),
+          );
+        }
+      },
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
