@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../home/home_screen.dart';
+import '../parent/parent_dashboard.dart';
 import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -109,6 +110,23 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: ElevatedButton(
                       onPressed: _handleLogin,
                       child: const Text('MASUK'),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: OutlinedButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => const ParentDashboard()),
+                        );
+                      },
+                      style: OutlinedButton.styleFrom(
+                        side: BorderSide(color: Theme.of(context).primaryColor),
+                      ),
+                      child: const Text('MASUK SEBAGAI ORANG TUA'),
                     ),
                   ),
                   const SizedBox(height: 16),
