@@ -78,7 +78,7 @@ class StudentGradesScreen extends StatelessWidget {
 
   TableRow _tableHeader() {
     return TableRow(
-      backgroundColor: Colors.grey[100],
+      decoration: BoxDecoration(color: Colors.grey[100]),
       children: const [
         Padding(
           padding: EdgeInsets.all(12),
