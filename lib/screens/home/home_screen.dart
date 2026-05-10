@@ -67,21 +67,7 @@ class _HomeContent extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Yayasan Zainul Ilah'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () async {
-              final prefs = await SharedPreferences.getInstance();
-              await prefs.remove('isLoggedIn');
-              if (context.mounted) {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LoginScreen()),
-                );
-              }
-            },
-          ),
-        ],
+        // Tombol logout dihapus dari sini agar beranda bersih untuk publik
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -142,21 +128,43 @@ class _HomeContent extends StatelessWidget {
 
   Widget _buildQuickActions(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(24),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+      child: Column(
         children: [
-          _quickActionItem(Icons.school, 'Pendidikan'),
-          _quickActionItem(Icons.favorite, 'Sosial'),
-          _quickActionItem(Icons.mosque, 'Dakwah'),
-          InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const TransparencyDashboard()),
-              );
-            },
-            child: _quickActionItem(Icons.analytics, 'Laporan'),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _quickActionItem(Icons.school, 'Pendidikan'),
+              _quickActionItem(Icons.favorite, 'Sosial'),
+              _quickActionItem(Icons.mosque, 'Dakwah'),
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const TransparencyDashboard()),
+                  );
+                },
+                child: _quickActionItem(Icons.analytics, 'Laporan'),
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+          // Tombol PPDB
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Halaman Pendaftaran PPDB akan segera hadir!')),
+                );
+              },
+              icon: const Icon(Icons.app_registration),
+              label: const Text('PENDAFTARAN SANTRI BARU (PPDB)'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.amber[700],
+                padding: const EdgeInsets.symmetric(vertical: 16),
+              ),
+            ),
           ),
         ],
       ),
