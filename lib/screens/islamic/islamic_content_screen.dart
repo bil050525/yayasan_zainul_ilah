@@ -8,7 +8,7 @@ class IslamicContentScreen extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        app_bar: AppBar(
+        appBar: AppBar(
           title: const Text('Kajian & Doa'),
           bottom: const TabBar(
             tabs: [
