@@ -5,20 +5,40 @@ import '../../providers/theme_provider.dart';
 import '../auth/login_screen.dart';
 import '../attendance/attendance_screen.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  bool _isLoggedIn = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkLoginStatus();
+  }
+
+  Future<void> _checkLoginStatus() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profil Pengguna'),
-        actions: [
+        actions: _isLoggedIn ? [
           IconButton(
             icon: const Icon(Icons.edit),
             onPressed: () {},
           ),
-        ],
+        ] : null,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -27,7 +47,7 @@ class ProfileScreen extends StatelessWidget {
             const SizedBox(height: 24),
             _buildMenuSection(context),
             const SizedBox(height: 24),
-            _buildLogoutButton(context),
+            _isLoggedIn ? _buildLogoutButton(context) : _buildLoginButton(context),
             const SizedBox(height: 32),
           ],
         ),
@@ -46,25 +66,29 @@ class ProfileScreen extends StatelessWidget {
           bottomRight: Radius.circular(32),
         ),
       ),
-      child: const Column(
+      child: Column(
         children: [
           CircleAvatar(
             radius: 50,
             backgroundColor: Colors.white,
-            child: Icon(Icons.person, size: 60, color: Color(0xFF1B5E20)),
+            child: Icon(
+              _isLoggedIn ? Icons.person : Icons.person_outline, 
+              size: 60, 
+              color: const Color(0xFF1B5E20)
+            ),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Text(
-            'Pengunjung Yayasan',
-            style: TextStyle(
+            _isLoggedIn ? 'Pengurus Yayasan' : 'Tamu Yayasan',
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 22,
               fontWeight: FontWeight.bold,
             ),
           ),
           Text(
-            'pengunjung@email.com',
-            style: TextStyle(color: Colors.white70),
+            _isLoggedIn ? 'pengurus@email.com' : 'Selamat datang, silakan masuk',
+            style: const TextStyle(color: Colors.white70),
           ),
         ],
       ),
@@ -88,16 +112,16 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
           _buildMenuItem(Icons.history, 'Riwayat Donasi', () {}),
-          _buildMenuItem(Icons.calendar_today, 'Absensi Pengurus', () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const AttendanceScreen()),
-            );
-          }),
+          if (_isLoggedIn) // Hanya muncul jika sudah login
+            _buildMenuItem(Icons.calendar_today, 'Absensi Pengurus', () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const AttendanceScreen()),
+              );
+            }),
           _buildMenuItem(Icons.notifications_outlined, 'Notifikasi', () {}),
-          _buildMenuItem(Icons.security, 'Keamanan Akun', () {}),
           _buildMenuItem(Icons.help_outline, 'Pusat Bantuan', () {}),
-          _buildMenuItem(Icons.info_outline, 'Syarat & Ketentuan', () {}),
+          _buildMenuItem(Icons.info_outline, 'Tentang Aplikasi', () {}),
         ],
       ),
     );
@@ -115,6 +139,25 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
+  Widget _buildLoginButton(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: SizedBox(
+        width: double.infinity,
+        child: ElevatedButton.icon(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const LoginScreen()),
+            ).then((_) => _checkLoginStatus());
+          },
+          icon: const Icon(Icons.login),
+          label: const Text('MASUK SEKARANG'),
+        ),
+      ),
+    );
+  }
+
   Widget _buildLogoutButton(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -124,13 +167,7 @@ class ProfileScreen extends StatelessWidget {
           onPressed: () async {
             final prefs = await SharedPreferences.getInstance();
             await prefs.remove('isLoggedIn');
-            if (context.mounted) {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => const LoginScreen()),
-                (route) => false,
-              );
-            }
+            _checkLoginStatus();
           },
           icon: const Icon(Icons.logout, color: Colors.red),
           label: const Text('Keluar Akun', style: TextStyle(color: Colors.red)),
