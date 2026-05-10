@@ -8,6 +8,7 @@ import '../profile/profile_screen.dart';
 import '../dashboard/transparency_dashboard.dart';
 import '../islamic/prayer_times_screen.dart';
 import '../islamic/islamic_content_screen.dart';
+import 'ppdb_form_screen.dart';
 import '../../models/news_model.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -157,8 +158,9 @@ class _HomeContent extends StatelessWidget {
             width: double.infinity,
             child: ElevatedButton.icon(
               onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Halaman Pendaftaran PPDB akan segera hadir!')),
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const PpdbFormScreen()),
                 );
               },
               icon: const Icon(Icons.app_registration),
