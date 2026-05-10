@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
-  static const Color primaryColor = Color(0xFF1B5E20); // Deep Green
-  static const Color accentColor = Color(0xFFFFB300); // Amber/Gold
-  static const Color backgroundColor = Color(0xFFF8F9FA);
+  static const Color primaryColor = Color(0xFF1B5E20); // Deep Emerald
+  static const Color secondaryColor = Color(0xFF0D47A1); // Navy Blue
+  static const Color accentColor = Color(0xFFFFA000); // Amber
+  static const Color backgroundColor = Color(0xFFF8F9FA); // Off White
   static const Color surfaceColor = Colors.white;
   static const Color textPrimary = Color(0xFF212121);
   static const Color textSecondary = Color(0xFF757575);
@@ -26,7 +27,8 @@ class AppTheme {
       colorScheme: ColorScheme.fromSeed(
         seedColor: primaryColor,
         primary: primaryColor,
-        secondary: accentColor,
+        secondary: secondaryColor,
+        tertiary: accentColor,
         surface: isDark ? const Color(0xFF121212) : surfaceColor,
         background: isDark ? const Color(0xFF121212) : backgroundColor,
         brightness: brightness,
@@ -39,15 +41,17 @@ class AppTheme {
           fontSize: 32,
           fontWeight: FontWeight.bold,
           color: isDark ? Colors.white : textPrimary,
+          letterSpacing: -0.5,
         ),
         titleLarge: GoogleFonts.inter(
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
+          fontSize: 22,
+          fontWeight: FontWeight.w700,
           color: isDark ? Colors.white : textPrimary,
         ),
         bodyLarge: GoogleFonts.inter(
           fontSize: 16,
           color: isDark ? Colors.white70 : textPrimary,
+          height: 1.5,
         ),
         bodyMedium: GoogleFonts.inter(
           fontSize: 14,
@@ -58,26 +62,36 @@ class AppTheme {
         backgroundColor: isDark ? const Color(0xFF1F1F1F) : primaryColor,
         foregroundColor: Colors.white,
         elevation: 0,
-        centerTitle: true,
+        centerTitle: false,
+        titleTextStyle: GoogleFonts.inter(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: primaryColor,
           foregroundColor: Colors.white,
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          elevation: 2,
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(16),
           ),
           textStyle: GoogleFonts.inter(
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 0.5,
           ),
         ),
       ),
       cardTheme: CardThemeData(
         color: isDark ? const Color(0xFF1F1F1F) : surfaceColor,
-        elevation: 2,
+        elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(20),
+          side: BorderSide(
+            color: isDark ? Colors.white10 : Colors.black.withOpacity(0.05),
+          ),
         ),
       ),
     );
