@@ -6,6 +6,8 @@ import '../donation/donation_screen.dart';
 import '../auth/login_screen.dart';
 import '../profile/profile_screen.dart';
 import '../dashboard/transparency_dashboard.dart';
+import '../islamic/prayer_times_screen.dart';
+import '../islamic/islamic_content_screen.dart';
 import '../../models/news_model.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -74,6 +76,7 @@ class _HomeContent extends StatelessWidget {
           children: [
             _buildHeroSection(context),
             _buildQuickActions(context),
+            _buildIslamicFeatures(context), // Fitur baru
             _buildLatestNews(),
           ],
         ),
@@ -254,6 +257,69 @@ class _HomeContent extends StatelessWidget {
             },
           ),
           const SizedBox(height: 24),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildIslamicFeatures(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.green[50],
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.green[100]!),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Layanan Islami',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _islamicItem(
+                context, 
+                Icons.access_time_filled, 
+                'Jadwal Sholat', 
+                const PrayerTimesScreen()
+              ),
+              _islamicItem(
+                context, 
+                Icons.menu_book, 
+                'Kumpulan Doa', 
+                const IslamicContentScreen()
+              ),
+              _islamicItem(
+                context, 
+                Icons.video_library, 
+                'Kajian Video', 
+                const IslamicContentScreen()
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _islamicItem(BuildContext context, IconData icon, String label, Widget screen) {
+    return InkWell(
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => screen));
+      },
+      child: Column(
+        children: [
+          CircleAvatar(
+            backgroundColor: Colors.white,
+            child: Icon(icon, color: Colors.green[700]),
+          ),
+          const SizedBox(height: 8),
+          Text(label, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w500)),
         ],
       ),
     );
