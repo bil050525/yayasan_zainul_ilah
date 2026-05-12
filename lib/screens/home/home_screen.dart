@@ -11,6 +11,7 @@ import '../islamic/islamic_content_screen.dart';
 import 'ppdb_form_screen.dart';
 import '../../models/news_model.dart';
 import '../../providers/data_provider.dart';
+import '../../core/app_theme.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
