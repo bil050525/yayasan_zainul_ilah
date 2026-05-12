@@ -231,7 +231,15 @@ class ProgramListScreen extends StatelessWidget {
                     height: 48,
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (_) => const DonationScreen()));
+                        Navigator.push(
+                          context, 
+                          MaterialPageRoute(
+                            builder: (_) => DonationScreen(
+                              program: program,
+                              initialAmount: 250000, // Contoh nominal default dari selector
+                            ),
+                          ),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.orange[700],
@@ -333,7 +341,15 @@ class ProgramListScreen extends StatelessWidget {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (_) => const DonationScreen()));
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => DonationScreen(
+                                program: program,
+                                initialAmount: 100000, // Default nominal untuk program lain
+                              ),
+                            ),
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.orange[700],
