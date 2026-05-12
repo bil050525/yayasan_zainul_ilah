@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../models/program_model.dart';
+import '../../providers/data_provider.dart';
 import '../donation/donation_screen.dart';
 import 'package:intl/intl.dart';
 
@@ -9,22 +11,23 @@ class ProgramListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final currencyFormatter = NumberFormat.currency(locale: 'id_ID', symbol: 'Rp ', decimalDigits: 0);
+    final programs = Provider.of<DataProvider>(context).programsList;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Katalog Program Kebaikan'),
+        title: const Text('Katalog Kebaikan'),
       ),
       body: GridView.builder(
         padding: const EdgeInsets.all(16),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          childAspectRatio: 0.6,
+          childAspectRatio: 0.65,
           crossAxisSpacing: 16,
           mainAxisSpacing: 16,
         ),
-        itemCount: dummyPrograms.length,
+        itemCount: programs.length,
         itemBuilder: (context, index) {
-          final program = dummyPrograms[index];
+          final program = programs[index];
           
           return Card(
             clipBehavior: Clip.antiAlias,

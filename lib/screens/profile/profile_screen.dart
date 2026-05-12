@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../providers/theme_provider.dart';
 import '../auth/login_screen.dart';
 import '../attendance/attendance_screen.dart';
+import '../admin/admin_dashboard.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -111,7 +112,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
               onChanged: (value) => themeProvider.toggleTheme(),
             ),
           ),
-          _buildMenuItem(Icons.history, 'Riwayat Donasi', () {}),
+          if (_isLoggedIn) // Hanya muncul jika sudah login
+            _buildMenuItem(Icons.dashboard_customize, 'Dashboard Admin', () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const AdminDashboard()),
+              );
+            }),
           if (_isLoggedIn) // Hanya muncul jika sudah login
             _buildMenuItem(Icons.calendar_today, 'Absensi Pengurus', () {
               Navigator.push(

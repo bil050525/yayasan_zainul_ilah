@@ -73,7 +73,7 @@ class AppTheme {
         style: ElevatedButton.styleFrom(
           backgroundColor: primaryColor,
           foregroundColor: Colors.white,
-          elevation: 2,
+          elevation: 0, // Desain modern cenderung flat untuk tombol
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
@@ -86,14 +86,26 @@ class AppTheme {
       ),
       cardTheme: CardThemeData(
         color: isDark ? const Color(0xFF1F1F1F) : surfaceColor,
-        elevation: 0,
+        elevation: 8,
+        shadowColor: Colors.black.withOpacity(0.08), // Soft Shadow
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
-          side: BorderSide(
-            color: isDark ? Colors.white10 : Colors.black.withOpacity(0.05),
-          ),
         ),
       ),
+    );
+  }
+
+  static BoxDecoration premiumShadowDecoration({bool isDark = false}) {
+    return BoxDecoration(
+      color: isDark ? const Color(0xFF1F1F1F) : Colors.white,
+      borderRadius: BorderRadius.circular(20),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.06),
+          blurRadius: 20,
+          offset: const Offset(0, 10),
+        ),
+      ],
     );
   }
 }

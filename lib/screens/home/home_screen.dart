@@ -10,6 +10,8 @@ import '../islamic/prayer_times_screen.dart';
 import '../islamic/islamic_content_screen.dart';
 import 'ppdb_form_screen.dart';
 import '../../models/news_model.dart';
+import '../../providers/data_provider.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -77,8 +79,8 @@ class _HomeContent extends StatelessWidget {
           children: [
             _buildHeroSection(context),
             _buildQuickActions(context),
-            _buildIslamicFeatures(context), // Fitur baru
-            _buildLatestNews(),
+            _buildIslamicFeatures(context),
+            _buildLatestNews(context), // Kirim context
           ],
         ),
       ),
@@ -88,9 +90,16 @@ class _HomeContent extends StatelessWidget {
   Widget _buildHeroSection(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.fromLTRB(24, 40, 24, 40),
       decoration: BoxDecoration(
-        color: Theme.of(context).primaryColor,
+        gradient: const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color(0xFF1B5E20), // Deep Emerald
+            Color(0xFF2E7D32), // Light Emerald
+          ],
+        ),
         borderRadius: const BorderRadius.only(
           bottomLeft: Radius.circular(32),
           bottomRight: Radius.circular(32),
@@ -181,17 +190,7 @@ class _HomeContent extends StatelessWidget {
       children: [
         Container(
           padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white70,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.05),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
+          decoration: AppTheme.premiumShadowDecoration(),
           child: Icon(icon, color: const Color(0xFF1B5E20)),
         ),
         const SizedBox(height: 8),
@@ -200,7 +199,9 @@ class _HomeContent extends StatelessWidget {
     );
   }
 
-  Widget _buildLatestNews() {
+  Widget _buildLatestNews(BuildContext context) {
+    final newsList = Provider.of<DataProvider>(context).newsList;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
@@ -214,12 +215,14 @@ class _HomeContent extends StatelessWidget {
           ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: dummyNews.length,
+            itemCount: newsList.length,
             itemBuilder: (context, index) {
-              final news = dummyNews[index];
-              return Card(
-                margin: const EdgeInsets.only(bottom: 12),
+              final news = newsList[index];
+              return Container(
+                margin: const EdgeInsets.only(bottom: 16),
+                decoration: AppTheme.premiumShadowDecoration(),
                 child: ListTile(
+                  contentPadding: const EdgeInsets.all(8),
                   onTap: () {
                     Navigator.push(
                       context,
@@ -229,17 +232,14 @@ class _HomeContent extends StatelessWidget {
                     );
                   },
                   leading: SizedBox(
-                    width: 50,
+                    width: 60,
+                    height: 60,
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(12),
                       child: Image.network(
                         news.imageUrl,
-                        width: 50,
-                        height: 50,
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) => Container(
-                          width: 50,
-                          height: 50,
                           color: Colors.grey[200],
                           child: const Icon(Icons.broken_image, size: 20),
                         ),
