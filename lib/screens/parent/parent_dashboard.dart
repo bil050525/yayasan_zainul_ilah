@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'student_grades_screen.dart';
+import '../../core/app_theme.dart';
 
 class ParentDashboard extends StatelessWidget {
   const ParentDashboard({super.key});
@@ -7,73 +8,129 @@ class ParentDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Portal Orang Tua'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications_outlined),
-            onPressed: () {},
-          ),
-        ],
-      ),
+      backgroundColor: const Color(0xFFF8F9FA),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildStudentInfo(context),
-            const SizedBox(height: 24),
-            _buildSectionTitle('Ringkasan Harian Anak'),
-            const SizedBox(height: 16),
-            _buildDailySummary(),
-            const SizedBox(height: 24),
-            _buildSectionTitle('Layanan Akademik & Keuangan'),
-            const SizedBox(height: 16),
-            _buildServiceGrid(context),
-            const SizedBox(height: 24),
+            _buildHeader(context),
+            const SizedBox(height: 80), // Space for floating card
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildDailyStatus(context),
+                  const SizedBox(height: 32),
+                  const Text('Navigasi Akademik', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 16),
+                  _buildAcademicMenu(context),
+                ],
+              ),
+            ),
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildSectionTitle(String title) {
-    return Text(
-      title,
-      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-    );
-  }
-
-  Widget _buildStudentInfo(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Theme.of(context).primaryColor,
-        borderRadius: BorderRadius.circular(20),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: 0,
+        selectedItemColor: const Color(0xFF1B5E20),
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Beranda'),
+          BottomNavigationBarItem(icon: Icon(Icons.chat_bubble_outline), label: 'Pesan'),
+          BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: 'Profil'),
+        ],
       ),
-      child: const Row(
-        children: [
-          CircleAvatar(
-            radius: 30,
-            backgroundColor: Colors.white,
-            child: Icon(Icons.face, size: 40, color: Color(0xFF1B5E20)),
+    );
+  }
+
+  Widget _buildHeader(BuildContext context) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Container(
+          width: double.infinity,
+          height: 180,
+          padding: const EdgeInsets.fromLTRB(24, 60, 24, 0),
+          decoration: const BoxDecoration(
+            color: Color(0xFF1B5E20),
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(32),
+              bottomRight: Radius.circular(32),
+            ),
           ),
-          SizedBox(width: 16),
-          Column(
+          child: const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Ahmad Zaidan',
-                style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+              Text('Selamat Datang,', style: TextStyle(color: Colors.white70, fontSize: 14)),
+              Text('Bapak/Ibu Ahmad', style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
+            ],
+          ),
+        ),
+        Positioned(
+          bottom: -60,
+          left: 24,
+          right: 24,
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: AppTheme.premiumShadowDecoration(),
+            child: Row(
+              children: [
+                const CircleAvatar(
+                  radius: 30,
+                  backgroundColor: Color(0xFFE8F5E9),
+                  child: Icon(Icons.person, size: 35, color: Color(0xFF1B5E20)),
+                ),
+                const SizedBox(width: 16),
+                const Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Ahmad Zaidan', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                      Text('Kelas 4A - Madrasah Ibtidaiyah', style: TextStyle(color: Colors.grey, fontSize: 12)),
+                      Text('NIS: 202400105', style: TextStyle(color: Colors.grey, fontSize: 11)),
+                    ],
+                  ),
+                ),
+                Icon(Icons.qr_code, color: Colors.grey[400]),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDailyStatus(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.black.withOpacity(0.05)),
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text('Kehadiran Hari Ini', style: TextStyle(fontWeight: FontWeight.w500)),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                decoration: BoxDecoration(
+                  color: Colors.green[50],
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: const Text('HADIR', style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold, fontSize: 11)),
               ),
-              Text(
-                'Kelas 4A - Madrasah Ibtidaiyah',
-                style: TextStyle(color: Colors.white70, fontSize: 14),
-              ),
-              Text(
-                'NIS: 202400105',
-                style: TextStyle(color: Colors.white70, fontSize: 12),
-              ),
+            ],
+          ),
+          const Divider(height: 24),
+          Row(
+            children: [
+              Icon(Icons.schedule, size: 18, color: Colors.amber[800]),
+              const SizedBox(width: 8),
+              const Text('Jadwal Terdekat:', style: TextStyle(fontSize: 13, color: Colors.grey)),
+              const Spacer(),
+              const Text('08:00 - 09:30: Matematika', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
             ],
           ),
         ],
@@ -81,80 +138,47 @@ class ParentDashboard extends StatelessWidget {
     );
   }
 
-  Widget _buildDailySummary() {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            _summaryRow(Icons.check_circle, 'Status Kehadiran', 'HADIR', Colors.green),
-            const Divider(),
-            _summaryRow(Icons.book, 'Jadwal Besok', 'Fikih, B. Arab, Matematika', Colors.blue),
-            const Divider(),
-            _summaryRow(Icons.assignment, 'Tugas Baru', '2 Belum Selesai', Colors.orange),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _summaryRow(IconData icon, String label, String value, Color color) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Row(
-        children: [
-          Icon(icon, color: color, size: 24),
-          const SizedBox(width: 16),
-          Expanded(child: Text(label, style: const TextStyle(fontWeight: FontWeight.w500))),
-          Text(value, style: TextStyle(fontWeight: FontWeight.bold, color: color)),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildServiceGrid(BuildContext context) {
+  Widget _buildAcademicMenu(BuildContext context) {
     return GridView.count(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       crossAxisCount: 2,
       crossAxisSpacing: 16,
       mainAxisSpacing: 16,
-      childAspectRatio: 1.3,
+      childAspectRatio: 1.1,
       children: [
-        _serviceCard(context, Icons.description, 'Rapor Digital', Colors.indigo),
-        _serviceCard(context, Icons.payments, 'Tagihan SPP', Colors.teal),
-        _serviceCard(context, Icons.shopping_bag, 'Seragam & Buku', Colors.brown),
-        _serviceCard(context, Icons.chat, 'Konsultasi Guru', Colors.cyan),
+        _menuItem(context, Icons.assessment, 'Rapor & Nilai', Colors.blue, () {
+          Navigator.push(context, MaterialPageRoute(builder: (_) => const StudentGradesScreen()));
+        }),
+        _menuItem(context, Icons.calendar_month, 'Jadwal Pelajaran', Colors.orange, () {}),
+        _menuItem(context, Icons.payments, 'Tagihan & SPP', Colors.green, () {}),
+        _menuItem(context, Icons.campaign, 'Pengumuman Kelas', Colors.purple, () {}),
       ],
     );
   }
 
-  Widget _serviceCard(BuildContext context, IconData icon, String label, Color color) {
+  Widget _menuItem(BuildContext context, IconData icon, String title, Color color, VoidCallback onTap) {
     return InkWell(
-      onTap: () {
-        if (label == 'Rapor Digital') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const StudentGradesScreen()),
-          );
-        }
-      },
+      onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: color.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: color.withOpacity(0.3)),
-        ),
+        decoration: AppTheme.premiumShadowDecoration(),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, color: color, size: 32),
-            const SizedBox(height: 8),
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: color, size: 28),
+            ),
+            const SizedBox(height: 12),
             Text(
-              label,
+              title,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
             ),
           ],
         ),
