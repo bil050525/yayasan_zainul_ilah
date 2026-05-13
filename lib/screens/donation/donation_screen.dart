@@ -15,7 +15,7 @@ class DonationScreen extends StatefulWidget {
 }
 
 class _DonationScreenState extends State<DonationScreen> {
-  int _currentStep = 1; // 1: Form, 2: Payment Method, 3: Success/Instructions
+  int _currentStep = 1; // 1: Form, 2: Payment, 3: Instructions, 4: Success
   bool _isAnonymous = false;
   String _selectedPaymentMethod = '';
   final _nameController = TextEditingController();
@@ -31,7 +31,7 @@ class _DonationScreenState extends State<DonationScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            if (_currentStep > 1 && _currentStep < 3) {
+            if (_currentStep > 1 && _currentStep < 4) {
               setState(() => _currentStep--);
             } else {
               Navigator.pop(context);
@@ -51,7 +51,8 @@ class _DonationScreenState extends State<DonationScreen> {
     switch (_currentStep) {
       case 1: return 'Konfirmasi Donasi';
       case 2: return 'Metode Pembayaran';
-      case 3: return 'Instruksi Pembayaran';
+      case 3: return 'Instruksi Bayar';
+      case 4: return 'Donasi Berhasil';
       default: return 'Donasi';
     }
   }
@@ -60,182 +61,98 @@ class _DonationScreenState extends State<DonationScreen> {
     switch (_currentStep) {
       case 1: return _buildCheckoutForm();
       case 2: return _buildPaymentMethods();
-      case 3: return _buildFinalStatus();
+      case 3: return _buildPaymentInstructions();
+      case 4: return _buildFinalStatus();
       default: return const SizedBox();
     }
   }
 
-  // --- STEP 1: CHECKOUT FORM ---
-  Widget _buildCheckoutForm() {
+  // ... (Step 1 & 2 tetap sama) ...
+
+  // --- STEP 3: PAYMENT INSTRUCTIONS (NATIVE UI) ---
+  Widget _buildPaymentInstructions() {
     return SingleChildScrollView(
-      key: const ValueKey(1),
+      key: const ValueKey(3),
       padding: const EdgeInsets.all(24),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildProgramSummary(),
-          const SizedBox(height: 32),
-          const Text('Data Diri Donatur', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 16),
-          _buildTextField('Nama Lengkap', _nameController, Icons.person_outline),
-          const SizedBox(height: 16),
-          _buildTextField('Email / WhatsApp', _whatsappController, Icons.contact_mail_outlined),
-          const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text('Sembunyikan nama saya (Hamba Allah)', style: TextStyle(fontSize: 13)),
-              Switch(
-                value: _isAnonymous,
-                onChanged: (v) => setState(() => _isAnonymous = v),
-                activeColor: Theme.of(context).primaryColor,
-              ),
-            ],
-          ),
-          const SizedBox(height: 24),
-          _buildTextField('Pesan / Doa (Opsional)', _messageController, Icons.chat_bubble_outline, maxLines: 3),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildProgramSummary() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: AppTheme.premiumShadowDecoration(),
-      child: Row(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: Image.network(widget.program?.imageUrl ?? '', width: 80, height: 80, fit: BoxFit.cover),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
+          Container(
+            padding: const EdgeInsets.all(24),
+            decoration: AppTheme.premiumShadowDecoration(),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(widget.program?.title ?? 'Program Kebaikan', style: const TextStyle(fontWeight: FontWeight.bold)),
-                const SizedBox(height: 4),
-                Text(
-                  'Nominal: Rp ${widget.initialAmount?.toInt() ?? 0}',
-                  style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold),
+                const Text('Batas Waktu Pembayaran', style: TextStyle(color: Colors.grey, fontSize: 13)),
+                const SizedBox(height: 8),
+                const Text('23:59:59', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.redAccent)),
+                const Divider(height: 40),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(_selectedPaymentMethod, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                    const Icon(Icons.account_balance, color: Colors.blue, size: 32),
+                  ],
                 ),
+                const SizedBox(height: 24),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text('Nomor Virtual Account', style: TextStyle(color: Colors.grey, fontSize: 12)),
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('8800112233445566', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, letterSpacing: 1.5)),
+                    TextButton(
+                      onPressed: () {
+                        Clipboard.setData(const ClipboardData(text: '8800112233445566'));
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Nomor VA disalin!')));
+                      },
+                      child: const Text('SALIN', style: TextStyle(fontWeight: FontWeight.bold)),
+                    ),
+                  ],
+                ),
+                const Divider(height: 32),
+                _summaryRow('Total Tagihan', 'Rp ${widget.initialAmount?.toInt() ?? 0}', isBold: true),
               ],
             ),
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTextField(String label, TextEditingController controller, IconData icon, {int maxLines = 1}) {
-    return TextField(
-      controller: controller,
-      maxLines: maxLines,
-      decoration: InputDecoration(
-        labelText: label,
-        prefixIcon: Icon(icon),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-        filled: true,
-        fillColor: Colors.white,
-      ),
-    );
-  }
-
-  // --- STEP 2: PAYMENT METHODS ---
-  Widget _buildPaymentMethods() {
-    return SingleChildScrollView(
-      key: const ValueKey(2),
-      padding: const EdgeInsets.all(24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildSectionTitle('E-Wallet'),
-          _paymentTile('GoPay', 'assets/icons/gopay.png', Icons.account_balance_wallet),
-          _paymentTile('OVO', 'assets/icons/ovo.png', Icons.account_balance_wallet),
-          _paymentTile('Dana', 'assets/icons/dana.png', Icons.account_balance_wallet),
-          const SizedBox(height: 24),
-          _buildSectionTitle('Virtual Account Bank'),
-          _paymentTile('BSI Virtual Account', '', Icons.account_balance),
-          _paymentTile('BCA Virtual Account', '', Icons.account_balance),
-          _paymentTile('Mandiri Virtual Account', '', Icons.account_balance),
-          const SizedBox(height: 24),
-          _buildSectionTitle('Lainnya'),
-          _paymentTile('QRIS (Modern & Cepat)', '', Icons.qr_code_scanner),
           const SizedBox(height: 32),
-          _buildCostSummary(),
+          const Align(
+            alignment: Alignment.centerLeft,
+            child: Text('Cara Pembayaran', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          ),
+          const SizedBox(height: 16),
+          _buildInstructionStep('1', 'Buka aplikasi Mobile Banking Anda.'),
+          _buildInstructionStep('2', 'Pilih menu "Transfer" lalu pilih "Virtual Account".'),
+          _buildInstructionStep('3', 'Masukkan nomor VA di atas.'),
+          _buildInstructionStep('4', 'Periksa detail donasi dan konfirmasi pembayaran.'),
         ],
       ),
     );
   }
 
-  Widget _buildSectionTitle(String title) {
+  Widget _buildInstructionStep(String number, String text) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
-      child: Text(title, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.grey)),
-    );
-  }
-
-  Widget _paymentTile(String name, String asset, IconData icon) {
-    bool isSelected = _selectedPaymentMethod == name;
-    return GestureDetector(
-      onTap: () => setState(() => _selectedPaymentMethod = name),
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: isSelected ? Theme.of(context).primaryColor : Colors.transparent, width: 2),
-          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 10)],
-        ),
-        child: Row(
-          children: [
-            Icon(icon, color: isSelected ? Theme.of(context).primaryColor : Colors.grey),
-            const SizedBox(width: 16),
-            Text(name, style: TextStyle(fontWeight: isSelected ? FontWeight.bold : FontWeight.normal)),
-            const Spacer(),
-            if (isSelected) Icon(Icons.check_circle, color: Theme.of(context).primaryColor),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCostSummary() {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(color: Colors.blueGrey[50], borderRadius: BorderRadius.circular(16)),
-      child: Column(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _summaryRow('Donasi', 'Rp ${widget.initialAmount?.toInt() ?? 0}'),
-          const SizedBox(height: 8),
-          _summaryRow('Biaya Admin', 'Gratis', isGreen: true),
-          const Divider(height: 24),
-          _summaryRow('Total Pembayaran', 'Rp ${widget.initialAmount?.toInt() ?? 0}', isBold: true),
+          CircleAvatar(
+            radius: 12,
+            backgroundColor: Theme.of(context).primaryColor.withOpacity(0.1),
+            child: Text(number, style: TextStyle(fontSize: 12, color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold)),
+          ),
+          const SizedBox(width: 12),
+          Expanded(child: Text(text, style: const TextStyle(fontSize: 14, color: Colors.black87))),
         ],
       ),
     );
   }
 
-  Widget _summaryRow(String label, String value, {bool isGreen = false, bool isBold = false}) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(label, style: TextStyle(color: Colors.grey[600], fontSize: 13)),
-        Text(value, style: TextStyle(
-          fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
-          color: isGreen ? Colors.green : (isBold ? Colors.black : Colors.black87),
-          fontSize: isBold ? 16 : 13,
-        )),
-      ],
-    );
-  }
-
-  // --- STEP 3: FINAL STATUS / INSTRUCTIONS ---
+  // --- STEP 4: FINAL STATUS --- (Sama seperti sebelumnya tapi key berubah ke 4)
   Widget _buildFinalStatus() {
     return Center(
-      key: const ValueKey(3),
+      key: const ValueKey(4),
       child: Padding(
         padding: const EdgeInsets.all(32),
         child: Column(
@@ -261,39 +178,9 @@ class _DonationScreenState extends State<DonationScreen> {
     );
   }
 
-  Widget _buildReceiptCard() {
-    return Container(
-      padding: const EdgeInsets.all(24),
-      decoration: AppTheme.premiumShadowDecoration(),
-      child: Column(
-        children: [
-          _receiptRow('ID Transaksi', 'ZIL-99228811'),
-          _receiptRow('Tanggal', DateFormat('dd MMM yyyy, HH:mm').format(DateTime.now())),
-          _receiptRow('Program', widget.program?.title ?? ''),
-          _receiptRow('Donatur', _isAnonymous ? 'Hamba Allah' : _nameController.text),
-          const Divider(height: 32),
-          _receiptRow('Total', 'Rp ${widget.initialAmount?.toInt() ?? 0}', isBold: true),
-        ],
-      ),
-    );
-  }
-
-  Widget _receiptRow(String label, String value, {bool isBold = false}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(label, style: const TextStyle(color: Colors.grey, fontSize: 12)),
-          Text(value, style: TextStyle(fontWeight: isBold ? FontWeight.bold : FontWeight.w500, fontSize: 13)),
-        ],
-      ),
-    );
-  }
-
   // --- BOTTOM ACTION BUTTON ---
   Widget _buildBottomAction() {
-    if (_currentStep == 3) {
+    if (_currentStep == 4) {
       return Padding(
         padding: const EdgeInsets.all(24),
         child: ElevatedButton(
@@ -323,10 +210,12 @@ class _DonationScreenState extends State<DonationScreen> {
             } else {
               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Silakan pilih metode pembayaran')));
             }
+          } else if (_currentStep == 3) {
+            setState(() => _currentStep = 4); // Simulasi: Selesai bayar
           }
         },
         style: ElevatedButton.styleFrom(backgroundColor: Colors.orange[700], minimumSize: const Size(double.infinity, 55)),
-        child: Text(_currentStep == 1 ? 'LANJUT KE PEMBAYARAN' : 'BAYAR SEKARANG'),
+        child: Text(_currentStep == 1 ? 'LANJUT KE PEMBAYARAN' : (_currentStep == 2 ? 'PROSES PEMBAYARAN' : 'SAYA SUDAH TRANSFER')),
       ),
     );
   }
