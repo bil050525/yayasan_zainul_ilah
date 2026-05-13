@@ -67,9 +67,174 @@ class _DonationScreenState extends State<DonationScreen> {
     }
   }
 
-  // ... (Step 1 & 2 tetap sama) ...
+  // --- STEP 1: CHECKOUT FORM ---
+  Widget _buildCheckoutForm() {
+    return SingleChildScrollView(
+      key: const ValueKey(1),
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildProgramSummary(),
+          const SizedBox(height: 32),
+          const Text('Data Diri Donatur', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 16),
+          _buildTextField('Nama Lengkap', _nameController, Icons.person_outline),
+          const SizedBox(height: 16),
+          _buildTextField('Email / WhatsApp', _whatsappController, Icons.contact_mail_outlined),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text('Sembunyikan nama saya (Hamba Allah)', style: TextStyle(fontSize: 13)),
+              Switch(
+                value: _isAnonymous,
+                onChanged: (v) => setState(() => _isAnonymous = v),
+                activeColor: Theme.of(context).primaryColor,
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+          _buildTextField('Pesan / Doa (Opsional)', _messageController, Icons.chat_bubble_outline, maxLines: 3),
+        ],
+      ),
+    );
+  }
 
-  // --- STEP 3: PAYMENT INSTRUCTIONS (NATIVE UI) ---
+  Widget _buildProgramSummary() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: AppTheme.premiumShadowDecoration(),
+      child: Row(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Image.network(widget.program?.imageUrl ?? '', width: 80, height: 80, fit: BoxFit.cover),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(widget.program?.title ?? 'Program Kebaikan', style: const TextStyle(fontWeight: FontWeight.bold)),
+                const SizedBox(height: 4),
+                Text(
+                  'Nominal: Rp ${widget.initialAmount?.toInt() ?? 0}',
+                  style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTextField(String label, TextEditingController controller, IconData icon, {int maxLines = 1}) {
+    return TextField(
+      controller: controller,
+      maxLines: maxLines,
+      decoration: InputDecoration(
+        labelText: label,
+        prefixIcon: Icon(icon),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+        filled: true,
+        fillColor: Colors.white,
+      ),
+    );
+  }
+
+  // --- STEP 2: PAYMENT METHODS ---
+  Widget _buildPaymentMethods() {
+    return SingleChildScrollView(
+      key: const ValueKey(2),
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildSectionTitle('E-Wallet'),
+          _paymentTile('GoPay', Icons.account_balance_wallet),
+          _paymentTile('OVO', Icons.account_balance_wallet),
+          _paymentTile('Dana', Icons.account_balance_wallet),
+          const SizedBox(height: 24),
+          _buildSectionTitle('Virtual Account Bank'),
+          _paymentTile('BSI Virtual Account', Icons.account_balance),
+          _paymentTile('BCA Virtual Account', Icons.account_balance),
+          _paymentTile('Mandiri Virtual Account', Icons.account_balance),
+          const SizedBox(height: 24),
+          _buildSectionTitle('Lainnya'),
+          _paymentTile('QRIS (Modern & Cepat)', Icons.qr_code_scanner),
+          const SizedBox(height: 32),
+          _buildCostSummary(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSectionTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Text(title, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.grey)),
+    );
+  }
+
+  Widget _paymentTile(String name, IconData icon) {
+    bool isSelected = _selectedPaymentMethod == name;
+    return GestureDetector(
+      onTap: () => setState(() => _selectedPaymentMethod = name),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: isSelected ? Theme.of(context).primaryColor : Colors.transparent, width: 2),
+          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 10)],
+        ),
+        child: Row(
+          children: [
+            Icon(icon, color: isSelected ? Theme.of(context).primaryColor : Colors.grey),
+            const SizedBox(width: 16),
+            Text(name, style: TextStyle(fontWeight: isSelected ? FontWeight.bold : FontWeight.normal)),
+            const Spacer(),
+            if (isSelected) Icon(Icons.check_circle, color: Theme.of(context).primaryColor),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCostSummary() {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(color: Colors.blueGrey[50], borderRadius: BorderRadius.circular(16)),
+      child: Column(
+        children: [
+          _summaryRow('Donasi', 'Rp ${widget.initialAmount?.toInt() ?? 0}'),
+          const SizedBox(height: 8),
+          _summaryRow('Biaya Admin', 'Gratis', isGreen: true),
+          const Divider(height: 24),
+          _summaryRow('Total Pembayaran', 'Rp ${widget.initialAmount?.toInt() ?? 0}', isBold: true),
+        ],
+      ),
+    );
+  }
+
+  Widget _summaryRow(String label, String value, {bool isGreen = false, bool isBold = false}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(label, style: TextStyle(color: Colors.grey[600], fontSize: 13)),
+        Text(value, style: TextStyle(
+          fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+          color: isGreen ? Colors.green : (isBold ? Colors.black : Colors.black87),
+          fontSize: isBold ? 16 : 13,
+        )),
+      ],
+    );
+  }
+
+  // --- STEP 3: PAYMENT INSTRUCTIONS ---
   Widget _buildPaymentInstructions() {
     return SingleChildScrollView(
       key: const ValueKey(3),
@@ -149,7 +314,7 @@ class _DonationScreenState extends State<DonationScreen> {
     );
   }
 
-  // --- STEP 4: FINAL STATUS --- (Sama seperti sebelumnya tapi key berubah ke 4)
+  // --- STEP 4: FINAL STATUS ---
   Widget _buildFinalStatus() {
     return Center(
       key: const ValueKey(4),
@@ -174,6 +339,36 @@ class _DonationScreenState extends State<DonationScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildReceiptCard() {
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: AppTheme.premiumShadowDecoration(),
+      child: Column(
+        children: [
+          _receiptRow('ID Transaksi', 'ZIL-99228811'),
+          _receiptRow('Tanggal', DateFormat('dd MMM yyyy, HH:mm').format(DateTime.now())),
+          _receiptRow('Program', widget.program?.title ?? ''),
+          _receiptRow('Donatur', _isAnonymous ? 'Hamba Allah' : _nameController.text),
+          const Divider(height: 32),
+          _receiptRow('Total', 'Rp ${widget.initialAmount?.toInt() ?? 0}', isBold: true),
+        ],
+      ),
+    );
+  }
+
+  Widget _receiptRow(String label, String value, {bool isBold = false}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: const TextStyle(color: Colors.grey, fontSize: 12)),
+          Text(value, style: TextStyle(fontWeight: isBold ? FontWeight.bold : FontWeight.w500, fontSize: 13)),
+        ],
       ),
     );
   }
