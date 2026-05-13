@@ -2,37 +2,32 @@ import 'package:flutter/material.dart';
 import 'student_grades_screen.dart';
 import '../../core/app_theme.dart';
 
-class ParentDashboard extends StatelessWidget {
+class ParentDashboard extends StatefulWidget {
   const ParentDashboard({super.key});
+
+  @override
+  State<ParentDashboard> createState() => _ParentDashboardState();
+}
+
+class _ParentDashboardState extends State<ParentDashboard> {
+  int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            _buildHeader(context),
-            const SizedBox(height: 80), // Space for floating card
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildDailyStatus(context),
-                  const SizedBox(height: 32),
-                  const Text('Navigasi Akademik', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 16),
-                  _buildAcademicMenu(context),
-                ],
-              ),
-            ),
-          ],
-        ),
+      body: IndexedStack(
+        index: _currentIndex,
+        children: [
+          _buildMainHome(context),
+          _buildChatPlaceholder(),
+          _buildProfilePlaceholder(),
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
+        currentIndex: _currentIndex,
         selectedItemColor: const Color(0xFF1B5E20),
+        onTap: (index) => setState(() => _currentIndex = index),
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Beranda'),
           BottomNavigationBarItem(icon: Icon(Icons.chat_bubble_outline), label: 'Pesan'),
@@ -40,6 +35,38 @@ class ParentDashboard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget _buildMainHome(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          _buildHeader(context),
+          const SizedBox(height: 80),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildDailyStatus(context),
+                const SizedBox(height: 32),
+                const Text('Navigasi Akademik', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 16),
+                _buildAcademicMenu(context),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildChatPlaceholder() {
+    return const Center(child: Text('Halaman Pesan dengan Wali Kelas'));
+  }
+
+  Widget _buildProfilePlaceholder() {
+    return const Center(child: Text('Pengaturan Profil Orang Tua'));
   }
 
   Widget _buildHeader(BuildContext context) {
