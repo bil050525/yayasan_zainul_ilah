@@ -79,7 +79,7 @@ class _HomeContent extends StatelessWidget {
         child: Column(
           children: [
             _buildHeroSection(context),
-            _buildQuickActions(context),
+            const SizedBox(height: 24),
             _buildIslamicFeatures(context),
             _buildLatestNews(context), // Kirim context
           ],
@@ -92,8 +92,8 @@ class _HomeContent extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(24, 40, 24, 40),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
@@ -101,7 +101,12 @@ class _HomeContent extends StatelessWidget {
             Color(0xFF2E7D32), // Light Emerald
           ],
         ),
-        borderRadius: const BorderRadius.only(
+        image: DecorationImage(
+          image: NetworkImage('https://www.transparenttextures.com/patterns/arabesque.png'),
+          repeat: ImageRepeat.repeat,
+          opacity: 0.05,
+        ),
+        borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(32),
           bottomRight: Radius.circular(32),
         ),
@@ -140,65 +145,7 @@ class _HomeContent extends StatelessWidget {
     );
   }
 
-  Widget _buildQuickActions(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _quickActionItem(Icons.school, 'Pendidikan'),
-              _quickActionItem(Icons.favorite, 'Sosial'),
-              _quickActionItem(Icons.mosque, 'Dakwah'),
-              InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const TransparencyDashboard()),
-                  );
-                },
-                child: _quickActionItem(Icons.analytics, 'Laporan'),
-              ),
-            ],
-          ),
-          const SizedBox(height: 24),
-          // Tombol PPDB
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton.icon(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const PpdbFormScreen()),
-                );
-              },
-              icon: const Icon(Icons.app_registration),
-              label: const Text('PENDAFTARAN SANTRI BARU (PPDB)'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.amber[700],
-                padding: const EdgeInsets.symmetric(vertical: 16),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
-  Widget _quickActionItem(IconData icon, String label) {
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(16),
-          decoration: AppTheme.premiumShadowDecoration(),
-          child: Icon(icon, color: const Color(0xFF1B5E20)),
-        ),
-        const SizedBox(height: 8),
-        Text(label, style: const TextStyle(fontWeight: FontWeight.w500)),
-      ],
-    );
-  }
 
   Widget _buildLatestNews(BuildContext context) {
     final newsList = Provider.of<DataProvider>(context).newsList;
@@ -271,42 +218,56 @@ class _HomeContent extends StatelessWidget {
   Widget _buildIslamicFeatures(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.green[50],
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.green[100]!),
+      padding: const EdgeInsets.all(20),
+      decoration: AppTheme.premiumShadowDecoration().copyWith(
+        color: Colors.green[50], // Memberikan warna mint muda khusus kotak ini
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'Layanan Islami',
+            'Layanan Islami & Program',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
           const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+          // Grid Fitur & Program
+          GridView.count(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            crossAxisCount: 3,
+            mainAxisSpacing: 16,
+            crossAxisSpacing: 8,
+            childAspectRatio: 0.9,
             children: [
-              _islamicItem(
-                context, 
-                Icons.access_time_filled, 
-                'Jadwal Sholat', 
-                const PrayerTimesScreen()
-              ),
-              _islamicItem(
-                context, 
-                Icons.menu_book, 
-                'Kumpulan Doa', 
-                const IslamicContentScreen()
-              ),
-              _islamicItem(
-                context, 
-                Icons.video_library, 
-                'Kajian Video', 
-                const IslamicContentScreen()
-              ),
+              _islamicItem(context, Icons.mosque, 'Jadwal Sholat', const PrayerTimesScreen()),
+              _islamicItem(context, Icons.menu_book, 'Kumpulan Doa', const IslamicContentScreen()),
+              _islamicItem(context, Icons.video_library, 'Kajian Video', const IslamicContentScreen()),
+              _islamicItem(context, Icons.school, 'Pendidikan', const ProgramListScreen()),
+              _islamicItem(context, Icons.favorite, 'Sosial', const ProgramListScreen()),
+              _islamicItem(context, Icons.record_voice_over, 'Dakwah', const ProgramListScreen()),
             ],
+          ),
+          const SizedBox(height: 24),
+          // Tombol PPDB
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const PpdbFormScreen()),
+                );
+              },
+              icon: const Icon(Icons.app_registration),
+              label: const Text('PENDAFTARAN SANTRI BARU'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.amber[700],
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+            ),
           ),
         ],
       ),
@@ -319,13 +280,35 @@ class _HomeContent extends StatelessWidget {
         Navigator.push(context, MaterialPageRoute(builder: (context) => screen));
       },
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CircleAvatar(
-            backgroundColor: Colors.white,
-            child: Icon(icon, color: Colors.green[700]),
+          Container(
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.04),
+                  blurRadius: 15,
+                  spreadRadius: 2,
+                  offset: const Offset(0, 5),
+                ),
+              ],
+            ),
+            child: Icon(icon, color: Colors.green[700], size: 26),
           ),
-          const SizedBox(height: 8),
-          Text(label, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w500)),
+          const SizedBox(height: 10),
+          SizedBox(
+            width: 70, // Batasi lebar teks agar tidak tumpang tindih
+            child: Text(
+              label, 
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w500),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
         ],
       ),
     );

@@ -79,6 +79,11 @@ class _ParentDashboardState extends State<ParentDashboard> {
           padding: const EdgeInsets.fromLTRB(24, 60, 24, 0),
           decoration: const BoxDecoration(
             color: Color(0xFF1B5E20),
+            image: DecorationImage(
+              image: NetworkImage('https://www.transparenttextures.com/patterns/arabesque.png'),
+              repeat: ImageRepeat.repeat,
+              opacity: 0.05,
+            ),
             borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(32),
               bottomRight: Radius.circular(32),
